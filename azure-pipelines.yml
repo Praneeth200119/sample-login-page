@@ -14,10 +14,13 @@ jobs:
   - script: |
       flutter --disable-telemetry
       flutter packages get
-      flutter test
+      # flutter test
     displayName: 'Install Dependencies'
   - script: flutter build apk
     displayName: 'Build apk'
+  - script: |
+      flutter test
+    displayName: 'Test' 
   - task: CopyFiles@2
     inputs:
       SourceFolder: '$(Build.SourcesDirectory)/build/app/outputs/flutter-apk'
