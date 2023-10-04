@@ -11,14 +11,15 @@ jobs:
       sudo apt-get update -y
       sudo snap install flutter --classic
     displayName: 'Install Flutter'
-  - script: |
-      flutter test
-    displayName: 'Test' 
+  
   - script: |
       flutter --disable-telemetry
       flutter packages get
       # flutter test
     displayName: 'Install Dependencies'
+  - script: |
+      flutter test
+    displayName: 'Test' 
   - script: flutter build apk
     displayName: 'Build apk'
   
