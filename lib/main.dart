@@ -5,43 +5,22 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const Login(title: 'Login App'),
+      home: const Login(),
     );
   }
 }
 
 class Login extends StatefulWidget {
-  const Login({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  const Login({Key? key}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
@@ -49,14 +28,27 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: 'sample@gmail.com');
+  TextEditingController passwordController = TextEditingController(text: 'sample');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text(
+              'Login App', // Main title
+              key: Key('mainTitleText'), // Unique key for the main title
+            ),
+            Text(
+              'Login App', // Subtitle
+              key: Key('subtitleText'), // Unique key for the subtitle
+              style: TextStyle(fontSize: 19.0, color: Colors.white54),
+            ),
+          ],
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -66,12 +58,14 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
+                  key: Key('emailTextField'),
                   controller: emailController,
                   decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Email"),
+                    border: OutlineInputBorder(),
+                    labelText: "Email",
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
@@ -81,13 +75,15 @@ class _LoginState extends State<Login> {
                 ),
               ),
               Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                 child: TextFormField(
+                  key: Key('passwordTextField'),
                   controller: passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
-                      border: OutlineInputBorder(), labelText: "Password"),
+                    border: OutlineInputBorder(),
+                    labelText: "Password",
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your password';
@@ -97,25 +93,28 @@ class _LoginState extends State<Login> {
                 ),
               ),
               Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16.0),
                 child: Center(
                   child: ElevatedButton(
+                    key: Key('submitButton'),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        if (emailController.text == "arun@gogosoon.com" &&
-                            passwordController.text == "qazxswedcvfr") {
+                        // Check if entered credentials match the sample data
+                        if (emailController.text == 'sample@gmail.com' &&
+                            passwordController.text == 'sample') {
+                          // Navigate to the home page if credentials are valid
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomePage(
-                                  email: emailController.text,
-                                )),
+                              builder: (context) => HomePage(
+                                email: emailController.text,
+                              ),
+                            ),
                           );
                         } else {
+                          // Show an error message for invalid credentials
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Invalid Credentials')),
+                            const SnackBar(content: Text('Oops! Invalid credentials')),
                           );
                         }
                       } else {
@@ -128,6 +127,10 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
+              Text(
+                'Login App', // Another instance of the text
+                key: Key('secondLoginText'), // Unique key for the second instance
+              ),
             ],
           ),
         ),
@@ -135,29 +138,70 @@ class _LoginState extends State<Login> {
     );
   }
 }
-class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.email});
 
+class HomePage extends StatelessWidget {
   final String email;
+
+  const HomePage({Key? key, required this.email}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Home Page'),
-        ),
-        body: Column(
-          children: [
-            Text(email),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Go back!"),
-              ),
+      appBar: AppBar(
+        title: const Text('Home Page'),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Welcome to the Home Page', // Welcome message
+            key: Key('welcomeToHomePageText'), // Unique key for the welcome message
+          ),
+          Text(email),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text("Go back!"),
+              key: Key('goBackButton'), // Unique key for the Go back button
             ),
-          ],
-        ));
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NextPage(),
+                  ),
+                );
+              },
+              child: const Text("Go to Next Page"),
+              key: Key('goToNextPageButton'), // Unique key for the Go to Next Page button
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class NextPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Next Page'),
+      ),
+      body: Center(
+        child: Text(
+          'Everything is working',
+          style: TextStyle(fontSize: 24),
+          key: Key('everythingIsWorkingText'), // Unique key for the Everything is Fine text
+        ),
+      ),
+    );
   }
 }
