@@ -3,32 +3,40 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:samplemobile/main.dart';
 
 void main() {
-  testWidgets('Login page UI test', (WidgetTester tester) async {
+  testWidgets('Widget Test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that the title is correct.
-    expect(find.text('Login App'), findsOneWidget);
+    // Verify that the main title is displayed.
+    expect(find.byKey(const Key('mainTitleText')), findsOneWidget);
 
-    // Enter a valid email and password
-    await tester.enterText(find.byType(TextFormField).at(0), 'arun@gogosoon.com');
-    await tester.enterText(find.byType(TextFormField).at(1), 'qazxswedcvfr');
+    // Verify that the subtitle is displayed.
+    expect(find.byKey(const Key('subtitleText')), findsOneWidget);
 
-    // Tap the login button.
-    await tester.tap(find.byType(ElevatedButton));
-    // Wait for animations or async operations to complete.
+    // Verify that the email field is initially populated.
+    expect(find.byKey(const Key('emailTextField')), findsOneWidget);
+    expect(find.text('sample@gmail.com'), findsOneWidget);
+
+    // Verify that the password field is initially populated.
+    expect(find.byKey(const Key('passwordTextField')), findsOneWidget);
+    expect(find.text('sample'), findsOneWidget);
+
+    // Enter valid credentials.
+    await tester.enterText(find.byKey(const Key('emailTextField')), 'sample@gmail.com');
+    await tester.enterText(find.byKey(const Key('passwordTextField')), 'sample');
+
+    // Tap the submit button.
+    await tester.tap(find.byKey(const Key('submitButton')));
     await tester.pumpAndSettle();
 
-    // Verify that we are on the home page.
-    expect(find.text('Home Page'), findsOneWidget);
-    expect(find.text('arun@gogosoon.com'), findsOneWidget);
+    // Verify that the Home Page is displayed.
+    expect(find.byKey(const Key('welcomeToHomePageText')), findsOneWidget);
 
-    // Tap the "Go back!" button.
-    await tester.tap(find.byType(ElevatedButton));
-    // Wait for animations or async operations to complete.
+    // Tap the Go to Next Page button.
+    await tester.tap(find.byKey(const Key('goToNextPageButton')));
     await tester.pumpAndSettle();
 
-    // Verify that we are back on the login page.
-    expect(find.text('Login App'), findsOneWidget);
+    // Verify that the Next Page is displayed.
+    expect(find.byKey(const Key('everythingIsWorkingText')), findsOneWidget);
   });
 }
