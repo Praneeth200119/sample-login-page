@@ -1,55 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:samplemobile/main.dart';
+import 'package:ihl/views/welcome_page.dart';
+import 'package:provider/provider.dart';
+import 'package:connectivity_wrapper/connectivity_wrapper.dart';
 
 void main() {
-  testWidgets('Widget Test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Test text widgets', (WidgetTester tester) async {
+    // Set up providers for testing
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [
+          // Add your providers here as needed
+          Provider<ConnectivityStatus>.value(
+            value: ConnectivityStatus.CONNECTED, // Provide a mock value
+          ),
+        ],
+        child: MaterialApp(
+          home: WelcomePage(),
+        ),
+      ),
+    );
 
-    // Verify that the main title is displayed.
-    expect(find.byKey(const Key('mainTitleText')), findsOneWidget);
+    // Find and verify the "hCare" text
+    expect(find.text('Welcome to'), findsOneWidget);
+    expect(find.text('hCare'), findsOneWidget);
 
-    // Verify that the subtitle is displayed.
-    expect(find.byKey(const Key('subtitleText')), findsOneWidget);
 
-    // Verify that the email field is initially populated.
-    expect(find.byKey(const Key('emailTextField')), findsOneWidget);
-    expect(find.text('sample@gmail.com'), findsOneWidget);
+    // expect(find.text('New to IHL?'), findsOneWidget);
 
-    // Verify that the password field is initially populated.
-    expect(find.byKey(const Key('passwordTextField')), findsOneWidget);
-    expect(find.text('sample'), findsOneWidget);
+    // expect(find.text('New to IHL?'), findsOneWidget);
 
-    // Enter valid credentials.
-    await tester.enterText(find.byKey(const Key('emailTextField')), 'sample@gmail.com');
-    await tester.enterText(find.byKey(const Key('passwordTextField')), 'sample');
+    // Find the GestureDetector that wraps the "New to IHL" text
+    // final gestureDetectorFinder = find.byType(GestureDetector);
+    //
+    // // Simulate a tap on the GestureDetector
+    // await tester.tap(gestureDetectorFinder);
+    // await tester.pump();
 
-    // Tap the submit button.
-    await tester.tap(find.byKey(const Key('submitButton')));
-    await tester.pumpAndSettle();
+    final newuserGestureDetectorFinder = find.byKey(Key('newuser'));
+    expect(newuserGestureDetectorFinder, findsOneWidget);
 
-    // Verify that the Home Page is displayed.
-    expect(find.byKey(const Key('welcomeToHomePageText')), findsOneWidget);
+    await tester.tap(newuserGestureDetectorFinder);
+    await tester.pump();
 
-    // Tap the Go to Members List button.
-    await tester.tap(find.byKey(const Key('goToMembersListButton')));
-    await tester.pumpAndSettle();
+    final signInGestureDetectorFinder = find.byKey(Key('signin'));
+    expect(signInGestureDetectorFinder, findsOneWidget);
 
-    // Verify that the Members List is displayed.
-    expect(find.byKey(const Key('membersListTitle')), findsOneWidget);
+    // Add a small delay before tapping
+    // await Future.delayed(Duration(milliseconds: 10));
 
-    // Get the total number of members in the list.
-    final int totalMembers = 30;
+    // Tap the "Sign In" widget
+    await tester.tap(signInGestureDetectorFinder);
+    await tester.pump();
 
-    // Generate a random member index.
-    final int randomMemberIndex = DateTime.now().millisecondsSinceEpoch % totalMembers;
-
-    // Tap the random member in the list.
-    await tester.tap(find.text('Member 4'));
-    await tester.pumpAndSettle();
-
-    // Verify that the Member Profile is displayed.
-    expect(find.text('Profile: Member 4'), findsOneWidget);
   });
+
+  // Add more test cases as needed
 }
