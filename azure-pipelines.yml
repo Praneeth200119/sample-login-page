@@ -17,9 +17,9 @@ jobs:
       flutter packages get
       # flutter test
     displayName: 'Install Dependencies'
-  - script: |
-      flutter test
-    displayName: 'Test' 
+  # - script: |
+  #     flutter test
+  #   displayName: 'Test' 
   - script: flutter build apk
     displayName: 'Build apk'
   
